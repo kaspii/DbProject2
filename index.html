@@ -86,16 +86,14 @@
 
             <table>
                 <thead>
-                  <th>Title</th>
-                  <th>Longitude</th>
-                  <th>Latitude</th>
+                  <th>Location</th>
+                  <th>Magnitude</th>
                 </thead>
                     <tbody>
                     {{#each earthquakes}}
                     <tr>
-                        <td>{{properties.title}}</td>
-                        <td>{{geometry.coordinates.[0]}}</td>
-                        <td>{{geometry.coordinates.[1]}}</td>
+                        <td>{{properties.place}}</td>
+                        <td>{{properties.mag}}</td>
                     </tr>
                     {{/each}}
                     </tbody>
