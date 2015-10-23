@@ -197,7 +197,7 @@ Handlebars.registerHelper("inc", function(value, options){
 
     function initMap() {
   var Quake1_coord = {lat: -34.397, lng: 150.644};
-  var Quake2_coord = {{geometry.coordinates.[0]}}, {{geometry.coordinates.[1]}} ;
+  //var Quake2_coord = {{geometry.coordinates.[0]}}, {{geometry.coordinates.[1]}} ;
   // Create a map object and specify the DOM element for display.
  
   var map = new google.maps.Map(document.getElementById('map'), {
@@ -215,11 +215,11 @@ Handlebars.registerHelper("inc", function(value, options){
 }
 
   // Create a marker and set its position.
-  var marker = new google.maps.Marker({
+  /*var marker = new google.maps.Marker({
     map: map,
     position: Quake1_coord,
     title: 'Hello World!'
-  });
+  }); */
 }
 
     </script>
