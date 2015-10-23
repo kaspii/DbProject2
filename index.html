@@ -1,48 +1,229 @@
+<!--
+
 <!DOCTYPE html>
 <html>
   <head>
-      <style type="text/css">
-        html, body { height: 100%; margin: 0; padding: 0; }
-        #map { height: 250px; } 
-      </style> <!-- height was 100 percent -->
-      <script type="text/javascript" src="jSONhandler.js"></script>
+    <style type="text/css">
+      html, body { height: 100%; margin: 0; padding: 0; }
+      #map { height: 100%; }
+    </style>
+
+     
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.3/handlebars.js"></script>
+
   </head>
   <body>
-    <div class="container">
-        <div id="earthquake-data">
-        </div>
+
+
+        </script>
+
+<div id="map"></div>
+
+<script id="entry-template" type="text/x-handlebars-template">
+    {{#each earthquakes}}
+    <div class="row">
+       
+        <h3>Earthquake #{{inc @index}}</h3>
+        <ul>
+            <li>Location: {{properties.place}}</li>
+            <li>Magnitude: {{properties.mag}}</li>
+         <li>Longitude: {{geometry.coordinates.[0]}}</li>
+            <li>Latitude: {{geometry.coordinates.[1]}}</li>
+        </ul>
     </div>
+    {{/each}}
+</script>
+
+<script type="text/javascript">
+  // This is a handlebars helper function, just adds one to a value
+Handlebars.registerHelper("inc", function(value, options){
+    return parseInt(value) + 1;
+});
+
+</script>
+
+
+   <div id="map"></div>
     <script type="text/javascript">
-        var map;
-        function initMap() {
-          map = new google.maps.Map(document.getElementById('map'), {
-            center: {lat: -34.397, lng: 150.644},
-            zoom: 8
-          });
-        }
-    </script>
+
+   </script>
     <script async defer
-          src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBAs2_-C3LSuogBQVx8Lv2LiRKX6MKlyRA&callback=initMap">
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBAs2_-C3LSuogBQVx8Lv2LiRKX6MKlyRA&callback=initMap">
     </script>
-    
-    <!-- Div where map should go -->
-    <div id="map"></div>
-    <p>Testing to see if this will display</p>
-    <script id="entry-template" type="text/x-handlebars-template">
-        {{#each earthquakes}}
-        <div class="row">
-            <!-- Displaying the index of the data, offset by one
-                        Reference: http://stackoverflow.com/questions/22103989/adding-offset-to-index-when-looping-through-items-in-handlebars
-                        -->
-            <h3>Earthquake #{{inc @index}}</h3>
-            <ul>
-                <li>Location: {{properties.place}}</li>
-                <li>Magnitude: {{properties.mag}}</li>
-                <li>Longitude: {{geometry.coordinates.[0]}}</li>
-                <li>Latitude: {{geometry.coordinates.[1]}}</li>
-            </ul>
+
+    <script type = "text/javascript">
+
+    function initMap() {
+  var myLatLng = {lat: -34.397, lng: 150.644};
+
+  // Create a map object and specify the DOM element for display.
+ 
+  var map = new google.maps.Map(document.getElementById('map'), {
+    center: myLatLng,
+    scrollwheel: false,
+    zoom: 4
+  });
+
+  // Create a marker and set its position.
+  var marker = new google.maps.Marker({
+    map: map,
+    position: myLatLng,
+    title: 'Hello World!'
+  });
+}
+
+    </script>
+
+      </body>
+</html>
+
+-->
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        
+        <title>EARTHQUAKE!</title>
+        <meta name="description" content="Earthquake data." />
+        
+        <!-- Open Graph -->
+        <meta property="og:title" content="Earthquakes keep happening." />
+        <meta property="og:site_name" content="Daily Bruin Online Intern training." />
+        
+        <!-- CSS -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/foundation/5.5.3/css/foundation.css" rel="stylesheet" type="text/css">
+        
+        <!-- JavaScript -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.3/handlebars.js"></script>
+
+</head>
+
+<body>
+
+         <style type="text/css">
+      html, body { height: 100%; margin: 100px; padding: 0; }
+      #map { height: 50%; margin-bottom: 50px;}
+    </style>
+
+        <script>
+            // execute once my page is loaded
+            $(document).ready(function(){
+
+                // make the ajax request
+                $.ajax({
+                    url: "http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_day.geojson"
+
+                // process_data is a callback function, the result of the data 
+                // is automatically passed in as an argument
+                }).done(process_data);
+            });
+
+            function process_data(json_data) {
+                // Check your console to see what gets put there
+                console.log(json_data);
+                // Inspecting that, you can get a sense for the structure of the
+                // JSON file, which should match the documentation here: 
+                // http://earthquake.usgs.gov/earthquakes/feed/v1.0/geojson.php
+
+                // upon inspection, you should see that json_data has a property 
+                // "features", which is an array of objects that has data that
+                // looks promising
+
+                // often times we'll want to process or clean or filter the data 
+                // somehow. Here, we're just going to store the features array 
+                // into a new dictionary.
+
+                var earthquake_data = {
+                    "earthquakes": json_data.features
+                };
+
+                // Now we use handlebars to create our template
+                // This is taken straight from handlebars' website
+
+                // Uses jquery to select the template (see below)
+                var source = $("#entry-template").html();
+
+                // Use handlebars to turn it into a template
+                var template = Handlebars.compile(source);
+
+                // Now pass the data into the template to generate the html
+                var html_content = template(earthquake_data);
+
+                // html is now a string with the raw html
+                // we then put that into the earthquake-data div
+                $("#earthquake-data").html(html_content);
+            }
+
+            // This is a handlebars helper function, just adds one to a value
+            Handlebars.registerHelper("inc", function(value, options){
+                return parseInt(value) + 1;
+            });
+        </script>
+
+        <script id="entry-template" type="text/x-handlebars-template">
+            {{#each earthquakes}}
+                <div class="row">
+                    <!-- Displaying the index of the data, offset by one
+                    Reference: http://stackoverflow.com/questions/22103989/adding-offset-to-index-when-looping-through-items-in-handlebars
+                    -->
+                    <h3>Earthquake #{{inc @index}}</h3>
+                    <ul>
+                        <li>Title: {{properties.title}}</li>
+                        <li>Longitude: {{geometry.coordinates.[0]}}</li>
+                        <li>Latitude: {{geometry.coordinates.[1]}}</li>
+                    </ul>
+                </div>
+            {{/each}}
+        </script>
+
+        <div class="container">
+            <div id="earthquake-data">
+            </div>
         </div>
-        {{/each}}
+
+ <div id="map"></div>
+    <script type="text/javascript">
+
+   </script>
+    <script async defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBAs2_-C3LSuogBQVx8Lv2LiRKX6MKlyRA&callback=initMap">
     </script>
-  </body>
+
+    <script type = "text/javascript">
+
+    function initMap() {
+  var Quake1_coord = {lat: -34.397, lng: 150.644};
+  var Quake2_coord = {{geometry.coordinates.[0]}}, {{geometry.coordinates.[1]}} ;
+  // Create a map object and specify the DOM element for display.
+ 
+  var map = new google.maps.Map(document.getElementById('map'), {
+    center: myLatLng,
+    scrollwheel: false,
+    zoom: 4
+  });
+
+  // Create a marker and set its position.
+  var marker = new google.maps.Marker({
+    map: map,
+    position: myLatLng,
+    title: 'Hello World!'
+  });
+}
+
+  // Create a marker and set its position.
+  var marker = new google.maps.Marker({
+    map: map,
+    position: Quake1_coord,
+    title: 'Hello World!'
+  });
+}
+
+    </script>
+
+
+    </body>
 </html>
