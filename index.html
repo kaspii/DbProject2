@@ -1,85 +1,3 @@
-<!--
-
-<!DOCTYPE html>
-<html>
-  <head>
-    <style type="text/css">
-      html, body { height: 100%; margin: 0; padding: 0; }
-      #map { height: 100%; }
-    </style>
-
-     
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.3/handlebars.js"></script>
-
-  </head>
-  <body>
-
-
-        </script>
-
-<div id="map"></div>
-
-<script id="entry-template" type="text/x-handlebars-template">
-    {{#each earthquakes}}
-    <div class="row">
-       
-        <h3>Earthquake #{{inc @index}}</h3>
-        <ul>
-            <li>Location: {{properties.place}}</li>
-            <li>Magnitude: {{properties.mag}}</li>
-         <li>Longitude: {{geometry.coordinates.[0]}}</li>
-            <li>Latitude: {{geometry.coordinates.[1]}}</li>
-        </ul>
-    </div>
-    {{/each}}
-</script>
-
-<script type="text/javascript">
-  // This is a handlebars helper function, just adds one to a value
-Handlebars.registerHelper("inc", function(value, options){
-    return parseInt(value) + 1;
-});
-
-</script>
-
-
-   <div id="map"></div>
-    <script type="text/javascript">
-
-   </script>
-    <script async defer
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBAs2_-C3LSuogBQVx8Lv2LiRKX6MKlyRA&callback=initMap">
-    </script>
-
-    <script type = "text/javascript">
-
-    function initMap() {
-  var myLatLng = {lat: -34.397, lng: 150.644};
-
-  // Create a map object and specify the DOM element for display.
- 
-  var map = new google.maps.Map(document.getElementById('map'), {
-    center: myLatLng,
-    scrollwheel: false,
-    zoom: 4
-  });
-
-  // Create a marker and set its position.
-  var marker = new google.maps.Marker({
-    map: map,
-    position: myLatLng,
-    title: 'Hello World!'
-  });
-}
-
-    </script>
-
-      </body>
-</html>
-
--->
-
 <!DOCTYPE html>
 <html>
     <head>
@@ -197,11 +115,11 @@ Handlebars.registerHelper("inc", function(value, options){
 
     function initMap() {
   var Quake1_coord = {lat: -34.397, lng: 150.644};
-  //var Quake2_coord = {{geometry.coordinates.[0]}}, {{geometry.coordinates.[1]}} ;
+ // var Quake2_coord = {{{geometry.coordinates.[0]}}, {{geometry.coordinates.[1]}} };
   // Create a map object and specify the DOM element for display.
  
   var map = new google.maps.Map(document.getElementById('map'), {
-    center: myLatLng,
+    center: Quake1_coord,
     scrollwheel: false,
     zoom: 4
   });
@@ -209,18 +127,18 @@ Handlebars.registerHelper("inc", function(value, options){
   // Create a marker and set its position.
   var marker = new google.maps.Marker({
     map: map,
-    position: myLatLng,
+    position: Quake1_coord,
     title: 'Hello World!'
   });
 }
 
   // Create a marker and set its position.
-  /*var marker = new google.maps.Marker({
+ /* var marker = new google.maps.Marker({
     map: map,
-    position: Quake1_coord,
+    position: Quake2_coord,
     title: 'Hello World!'
-  }); */
-}
+  });
+*/
 
     </script>
 
