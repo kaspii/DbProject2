@@ -69,11 +69,6 @@
                 // Use handlebars to turn it into a template
                 var template = Handlebars.compile(source);
                 
-                var source2 = $("#table-template").html();
-                var template2 = Handlebars.compile(source2);
-                var html_content2 = template(earthquake_data);
-                $("#earthquake-table").html(html_content2);
-
                 // Now pass the data into the template to generate the html
                 var html_content = template(earthquake_data);
 
