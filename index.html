@@ -58,6 +58,7 @@
                 var earthquake_data = {
                     "earthquakes": json_data.features
                 };
+                
 
                 // Now we use handlebars to create our template
                 // This is taken straight from handlebars' website
@@ -67,6 +68,11 @@
 
                 // Use handlebars to turn it into a template
                 var template = Handlebars.compile(source);
+                
+                var source2 = $("#table-template").html();
+                var template2 = Handlebars.compile(source2);
+                var html_content2 = template(earthquake_data);
+                $("#earthquake-table").html(html_content2);
 
                 // Now pass the data into the template to generate the html
                 var html_content = template(earthquake_data);
@@ -100,9 +106,41 @@
                 </div>
             {{/each}}
         </script>
+        
+        <script id="table-template" type="text/x-handlebars-template">
+            <table>
+                <thead> 
+                    <th>Location</th> 
+                    <th>Magnitude</th> 
+                </thead> 
+                <tbody>
+                    {{#each earthquakes}}
+                    <tr>
+                        <td>{{properties.place}}</td>
+                        <td>{{properties.mag}}</td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </script>
+        
+        <!--
+        {{#users}} 
+        <tr> 
+            <td>{{fullName person}}</td> 
+            <td>{{jobTitle}}</td> 
+            <td><a href="https://twitter.com/{{twitter}}">@{{twitter}}</a></td> 
+        </tr> 
+        {{/users}} 
+        -->
 
         <div class="container">
             <div id="earthquake-data">
+            </div>
+        </div>
+        
+        <div class="container">
+            <div id="earthquake-table">
             </div>
         </div>
     <br><br>
